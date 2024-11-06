@@ -16,7 +16,6 @@ const CardComponent = ({ character, onClick }) => {
     reptilian: "success",
     mammal: "secondary",
   };
-  console.log("ds", character);
   return (
     <Card
       className={`[&&]:h-full shadow-sm bg-${

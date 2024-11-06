@@ -31,7 +31,6 @@ const Home = () => {
             character.films.map((film) => getFilmData(film))
           );
           const homeworldData = await getHomeworldData(character.homeworld);
-          // console.log(character.species);
           let speciesData = null;
           if (character.species.length > 0) {
             speciesData = await getSpeciesData(character.species[0]);
@@ -82,7 +81,7 @@ const Home = () => {
   return (
     <Container className="py-5">
       <h1 className="text-center mb-4">Star Wars Characters</h1>
-      <div className="flex justify-between items-center mb-4 gap-4">
+      <div className="flex justify-between items-center mb-4 gap-4 flex-wrap">
         <input
           type="text"
           placeholder={`Search by ${selectedItem}`}

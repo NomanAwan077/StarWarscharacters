@@ -3,7 +3,9 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Auth/AuthContext";
 export default function LoginPage() {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,17 +17,16 @@ export default function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const isAuthenticated = login(email, password);
     if (!email || !password) {
       setError("Please fill in all fields");
     } else {
       setError("");
-      if (
-        email === authenticatedUser.email &&
-        password === authenticatedUser.password
-      ) {
-        navigate("/");
+      if (!isAuthenticated) {
+        setError("Invalid username or password");
       } else {
-        setError("Invalid email or password");
+        navigate("/");
+        setError("");
       }
     }
   };
@@ -62,25 +63,6 @@ export default function LoginPage() {
               placeholder="Password"
             />
           </Form.Group>
-          <div className="flex items-center justify-between">
-            <Form.Group controlId="remember-me" className="flex items-center">
-              <Form.Check
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <Form.Label className="ml-2 block text-sm text-gray-900">
-                Remember me
-              </Form.Label>
-            </Form.Group>
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot your password?
-              </a>
-            </div>
-          </div>
           <div>
             <Button
               type="submit"

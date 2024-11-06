@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import Button from "../../common/Button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../Auth/AuthContext";
 
 const Header = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const handleLogout = () => {
+    logout();
     navigate("/login");
   };
   return (
