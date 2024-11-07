@@ -11,6 +11,7 @@ import {
 import Loader from "../components/Loader/Loader";
 import FilterButton from "../components/common/FilterButton";
 import Button from "../components/common/Button";
+import NoDataFound from "../components/common/NoDataFound";
 
 const Home = () => {
   const [selectedItem, setSelectedItem] = useState("Name");
@@ -72,7 +73,7 @@ const Home = () => {
     setSelectedItem(eventKey);
   };
   const handleClearFilter = () => {
-    setSelectedItem("Select an option");
+    setSelectedItem("Name");
     setSearch("");
   };
 
@@ -88,8 +89,8 @@ const Home = () => {
           className="max-w-[450px] form-control"
           onChange={(e) => setSearch(e.target.value)}
         />
-        <div className="flex justify-between items-center gap-4">
-          <span>Filter By :</span>
+        <div className="flex justify-between items-center gap-2">
+          <span className=" whitespace-nowrap">Filter By :</span>
           <FilterButton
             handleSelect={handleSelect}
             selectedItem={selectedItem}
@@ -98,31 +99,53 @@ const Home = () => {
         </div>
       </div>
       <Row xs={1} sm={2} md={3} lg={4} className="g-4">
-        {characters
-          ?.filter((character) => {
-            const searchTerm = search.toLowerCase();
-            return selectedItem === "Films"
-              ? character.filmsData.some((film) =>
-                  film.title.toLowerCase().includes(searchTerm)
-                )
-              : selectedItem === "HomeWorld"
-              ? character.homeworld.name.toLowerCase().includes(searchTerm)
-              : selectedItem === "Species"
-              ? character.speciesData?.classification
-                  .toLowerCase()
-                  .includes(searchTerm)
-              : character.name.toLowerCase().includes(searchTerm);
-          })
-          .map((character) => {
-            return (
-              <Col key={character.id}>
-                <CardComponent
-                  character={character}
-                  onClick={handleCardClick}
-                />
-              </Col>
-            );
-          })}
+        {characters?.filter((character) => {
+          const searchTerm = search.toLowerCase();
+          return selectedItem === "Films"
+            ? character.filmsData.some((film) =>
+                film.title.toLowerCase().includes(searchTerm)
+              )
+            : selectedItem === "HomeWorld"
+            ? character.homeworld.name.toLowerCase().includes(searchTerm)
+            : selectedItem === "Species"
+            ? character.speciesData?.classification
+                .toLowerCase()
+                .includes(searchTerm)
+            : character.name.toLowerCase().includes(searchTerm);
+        }).length === 0 ? (
+          <NoDataFound />
+        ) : (
+          characters
+            ?.filter((character) => {
+              const searchTerm = search.toLowerCase();
+              return selectedItem === "Films"
+                ? character.filmsData.some((film) =>
+                    film.title.toLowerCase().includes(searchTerm)
+                  )
+                : selectedItem === "HomeWorld"
+                ? character.homeworld.name.toLowerCase().includes(searchTerm)
+                : selectedItem === "Species"
+                ? character.speciesData?.classification
+                    .toLowerCase()
+                    .includes(searchTerm)
+                : character.name.toLowerCase().includes(searchTerm);
+            })
+            .map((character) => {
+              if (characters.length === 0) {
+                console.log("no data");
+                return <NoDataFound />;
+              }
+              console.log("character");
+              return (
+                <Col key={character.id}>
+                  <CardComponent
+                    character={character}
+                    onClick={handleCardClick}
+                  />
+                </Col>
+              );
+            })
+        )}
       </Row>
       <div className="d-flex justify-content-between align-items-center w-full mt-9">
         {pageNo > 1 && <Button onClick={handlePrevious}>Previous</Button>}
