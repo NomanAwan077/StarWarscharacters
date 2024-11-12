@@ -8,19 +8,19 @@ export default function LoginPage() {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const authenticatedUser = {
-    email: "admin@admin.com",
-    password: "admin",
-  };
 
   const handleSubmit = (e) => {
+    console.log("handleSubmit", email, password);
+    console.log(rememberMe);
     e.preventDefault();
     const isAuthenticated = login(email, password);
     if (!email || !password) {
       setError("Please fill in all fields");
     } else {
+      localStorage.setItem("rememberMe", rememberMe);
       setError("");
       if (!isAuthenticated) {
         setError("Invalid username or password");
@@ -63,6 +63,19 @@ export default function LoginPage() {
               placeholder="Password"
             />
           </Form.Group>
+          <div className="flex items-center justify-between">
+            <Form.Group controlId="remember-me" className="flex items-center">
+              <Form.Check
+                type="checkbox"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <Form.Label className="ml-2 mb-0 mt-2 block text-sm text-gray-900">
+                Remember me
+              </Form.Label>
+            </Form.Group>
+          </div>
           <div>
             <Button
               type="submit"

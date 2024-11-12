@@ -56,12 +56,17 @@ export const AuthProvider = ({ children }) => {
   }, [tokenExpiry]);
   const refreshAccessToken = () => {
     console.log("Refreshing access token...");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("tokenExpiry");
-    // const newAccessToken = "newMockAccessToken";
-    // const newExpiryTime = Date.now() + ACCESS_TOKEN_EXPIRY;
-    // setAccessToken(newAccessToken);
-    // setTokenExpiry(newExpiryTime);
+    if (localStorage.getItem("rememberMe") == "true") {
+      console.log("rememberMe is true");
+      const newAccessToken = "newMockAccessToken";
+      const newExpiryTime = Date.now() + ACCESS_TOKEN_EXPIRY;
+      setAccessToken(newAccessToken);
+      setTokenExpiry(newExpiryTime);
+    } else {
+      console.log("rememberMe is false");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("tokenExpiry");
+    }
   };
 
   return (
